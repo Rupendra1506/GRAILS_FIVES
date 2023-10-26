@@ -1,0 +1,15 @@
+version: '3.7'
+
+#
+# docker-compose --file docker-compose.services.yml --file docker-compose.dev.yml up
+#
+
+services:
+
+    mysql:
+        ports:
+          - 3306:3306
+
+    redis:
+        ports:
+          - 6380:6379

@@ -1,0 +1,55 @@
+dataSource:
+    dbCreate: none
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    url: jdbc:mysql://${DB_HOSTNAME}/${DB_NAME}?useUnicode=true&characterEncoding=UTF-8&nullNamePatternMatchesAll=true&useSSL=false
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    pooled: true
+    properties:
+        validationQuery: SELECT 1
+        testOnBorrow: true
+        testOnReturn: false
+        testWhileIdle: true
+        timeBetweenEvictionRunsMillis: 1800000
+        minEvictableIdleTimeMillis: 1800000
+        numTestsPerEvictionRun: 3
+        maxActive: ${DB_MAXACTIVE}
+        maxIdle: ${DB_MAXIDLE}
+        minIdle: ${DB_MINIDLE}
+        initialSize: ${DB_INITIALSIZE}
+        maxWait: ${DB_MAXWAIT}
+
+---
+directly:
+    version:
+        buildNumber: ${BUILD_NUMBER}
+
+---
+grails:
+    redis:
+        host: ${REDIS_HOSTNAME}
+        port: 6379
+        pooled: true
+        usePool: true
+        resources: 15
+        timeout: 5000
+        poolConfig:
+            maxIdle: 10
+            minIdle: 5
+            testWhileIdle: true
+            testOnBorrow: true
+            testOnReturn: true
+            numTestsPerEvictionRun: 10
+            timeBetweenEvictionRunsMillis: 60000
+
+---
+rabbitmq:
+    connection:
+        host: ${RABBIT_HOSTNAME}
+        username: ${RABBIT_USERNAME}
+        password: ${RABBIT_PASSWORD}
+
+---
+jwt:
+    publicKey: ${JWT_PUBLIC_KEY}

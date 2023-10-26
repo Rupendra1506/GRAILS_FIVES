@@ -1,0 +1,44 @@
+FROM debian:jessie
+MAINTAINER Ryan Barber <ryan@directly.com>
+
+ARG build_number
+
+ENV BUILD_NUMBER=$build_number \
+    DEBIAN_FRONTEND=noninteractive \
+    REDIS_HOSTNAME=localhost \
+    DB_NAME=andre_test \
+    DB_HOSTNAME=localhost \
+    DB_USERNAME=root \
+    DB_PASSWORD="" \
+    JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+
+# Install Java 8
+RUN echo "deb http://ftp.de.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports-stable.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+       curl \
+       unzip \
+       gettext-base \
+    && apt-get install -y -t jessie-backports \
+       openjdk-8-jdk-headless \
+       ca-certificates-java \
+    && rm -Rf /var/lib/apt/lists/* \
+    && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
+    && apt-get clean
+
+# Download gradle preemptively
+RUN curl -o /tmp/gradle-3.4.1-bin.zip http://downloads.gradle.org/distributions/gradle-3.4.1-bin.zip
+
+COPY . /root/andre
+
+RUN sed -E "s/https.*$/file\\:\/tmp\/gradle-3.4.1-bin.zip/" -i /root/andre/gradle/wrapper/gradle-wrapper.properties
+
+RUN cd /root/andre \
+  && ./gradlew clean \
+  && ./gradlew compileGroovy \
+  && ./gradlew compileJava \
+  && rm /tmp/gradle-3.4.1-bin.zip
+
+CMD /bin/bash -c 'cat /root/andre/docker-test-config.yml | envsubst > /root/andre/test-dbm-config.yml' \
+  && cd /root/andre \
+  && ./gradlew -Plocal.config.location=test-dbm-config.yml dbmUpdate

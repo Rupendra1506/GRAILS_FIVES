@@ -1,0 +1,11 @@
+import net.insidr.internal.status.InternalStatus
+
+model {
+    InternalStatus internalStatus
+}
+
+json {
+    status internalStatus.status
+    message internalStatus.message
+    entries internalStatus.entries
+}

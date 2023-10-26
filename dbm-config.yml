@@ -1,0 +1,15 @@
+dataSource:
+    dbCreate: none
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    url: jdbc:mysql://localhost/andre?useUnicode=true&characterEncoding=UTF-8&nullNamePatternMatchesAll=true&useSSL=false
+    username: root
+    password: ""
+
+---
+quartz:
+    autoStartup: false
+
+---
+rabbitmq:
+    enabled: false

@@ -1,0 +1,37 @@
+import net.insidr.user.ExpertReputation
+
+model {
+    ExpertReputation expertReputation
+}
+
+json {
+    company g.render(template: '/company/company', model: [ company: expertReputation.company ])
+    reputationMetrics {
+        overallReputationForCompany {
+            bucket expertReputation.overallReputationForCompany
+        }
+        csat {
+            bucket expertReputation.csatBucket
+            value expertReputation.csatValue
+        }
+        resolutionRate {
+            bucket expertReputation.resolutionRateBucket
+            value expertReputation.resolutionRateValue
+        }
+        actionRate {
+            bucket expertReputation.actionRateBucket
+            value expertReputation.actionRateValue
+        }
+        feedbackRate {
+            bucket expertReputation.feedbackRateBucket
+            value expertReputation.feedbackRateValue
+        }
+        answerQuality {
+            bucket expertReputation.answerQualityBucket
+            value expertReputation.answerQualityValue
+        }
+        questionsPerTimePeriod {
+            value expertReputation.questionsAnswered
+        }
+    }
+}

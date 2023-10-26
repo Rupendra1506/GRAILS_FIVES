@@ -1,0 +1,27 @@
+dataSource:
+    dbCreate: none
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    url: jdbc:mysql://localhost/andre?useUnicode=true&characterEncoding=UTF-8&nullNamePatternMatchesAll=true&useSSL=false
+    username: root
+    password: ""
+
+---
+grails:
+    redis:
+        host: localhost
+        port: 6379
+#        host: "Redis hostname"   # defaults to localhost
+#        port: port_number        # Detaults to 6379
+#        password: abcd1234       # Remove if Redis does not have a password
+
+---
+rabbitmq:
+    connection:
+        host: localhost
+        username: andre
+        password: abcd1234
+#        host: "RabbitMQ hostname"
+#        port: port_number            # Detaults to 5672
+#        username: "RabbitMQ username"
+#        password: "RabbitMQ password"

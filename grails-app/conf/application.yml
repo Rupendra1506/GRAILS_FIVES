@@ -1,0 +1,373 @@
+---
+grails:
+  profile: rest-api
+  codegen:
+    defaultPackage: allnew.directly.routing.engine
+  gorm:
+    reactor:
+      # Whether to translate GORM events into Reactor events
+      # Disabled by default for performance reasons
+      events: false
+info:
+  app:
+    name: "@info.app.name@"
+    version: "@info.app.version@"
+    grailsVersion: "@info.app.grailsVersion@"
+spring:
+  main:
+    banner-mode: "off"
+  groovy:
+    template:
+      check-template-location: false
+
+# Spring Actuator Endpoints are Disabled by Default
+endpoints:
+  enabled: false
+  jmx:
+    enabled: true
+
+---
+grails:
+  mime:
+    disable:
+      accept:
+        header:
+          userAgents:
+            - Gecko
+            - WebKit
+            - Presto
+            - Trident
+    types:
+      json:
+        - application/json
+        - text/json
+      hal:
+        - application/hal+json
+        - application/hal+xml
+      xml:
+        - text/xml
+        - application/xml
+      atom: application/atom+xml
+      css: text/css
+      csv: text/csv
+      js: text/javascript
+      rss: application/rss+xml
+      text: text/plain
+      all: "*/*"
+  urlmapping:
+    cache:
+      maxsize: 1000
+  controllers:
+    defaultScope: singleton
+  converters:
+    encoding: UTF-8
+---
+hibernate:
+  cache:
+    queries: false
+    use_second_level_cache: false
+    use_query_cache: false
+dataSource:
+  pooled: true
+  jmxExport: true
+  driverClassName: org.h2.Driver
+  username: sa
+  password: ""
+
+---
+routing:
+  defaultDelayInSeconds: 120
+  maxQuestionToExpertRatio: 5
+  tierPercentages:
+    official: 1.0
+    tier1: 0.8
+    tier2: 0.2
+  worker:
+    batchSize: 100
+  questionLookbackPeriodInMinutes: 15
+---
+availability:
+  defaultExpertsPerQuestionPerHourThreshold: 0.2
+  defaultConfidenceScoreThreshold: 0.8
+---
+directly:
+  version:
+    api: v1
+    buildNumber: local
+  origin: ALL_NEW_DIRECTLY_ROUTING_ENGINE
+  exchanges:
+    routing: directly.routing
+    escalation: directly.escalation
+  consumers:
+    maxAttempts: 5
+---
+rabbitmq:
+  exchanges:
+    - name: directly.notifications
+      type: topic
+    - name: directly.routing
+      type: topic
+    - name: directly.metrics
+      type: topic
+    - name: directly.rpc
+      type: topic
+  queues:
+    - name: directly.notifications.andre.approvedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.ApprovedQuestionNotification
+
+    - name: directly.notifications.andre.approvedOneOnOneQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.ApprovedOneOnOneQuestionNotification
+
+    - name: directly.notifications.andre.closedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.response.BestResponseNotification
+
+    - name: directly.notifications.andre.closedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.ClosedQuestionNotification
+
+    - name: directly.notifications.andre.closedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.NoResponseQuestionNotification
+
+    - name: directly.notifications.andre.closedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.ExpiredQuestionNotification
+
+    - name: directly.notifications.andre.escalatedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedQuestionNotification
+
+    - name: directly.notifications.andre.escalatedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedQuestionByCustomerNotification
+
+    - name: directly.notifications.andre.escalatedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedQuestionByExpertNotification
+
+    - name: directly.notifications.andre.escalatedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedQuestionByLackOfExpertsNotification
+
+    - name: directly.notifications.andre.escalatedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedQuestionByLanguageNotification
+
+    - name: directly.notifications.andre.escalatedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedQuestionByTimeNotification
+
+    - name: directly.notifications.andre.claimedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.ClaimedOneOnOneQuestionNotification
+
+    - name: directly.notifications.andre.releasedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.ManualReleasedOneOnOneQuestionNotification
+
+    - name: directly.notifications.andre.releasedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.TimeoutReleasedOneOnOneQuestionNotification
+
+    - name: directly.notifications.andre.releasedQuestions
+      exchange: directly.notifications
+      binding: net.insidr.question.EscalatedReleasedOneOnOneQuestionNotification
+
+    - name: directly.notifications.andre.rejectedAutoResponses
+      exchange: directly.notifications
+      binding: net.insidr.response.RejectedAutoResponseNotification
+
+    - name: directly.notifications.andre.rejectedAutoResponses
+      exchange: directly.notifications
+      binding: net.insidr.response.OpenedAutoResponseNotification
+
+    - name: directly.notifications.andre.companyInitialization
+      exchange: directly.notifications
+      binding: net.insidr.company.CompanyInitializationAndreNotification
+
+    - name: directly.notifications.andre.companyUpdate
+      exchange: directly.notifications
+      binding: net.insidr.company.NewCompanyNotification
+
+    - name: directly.notifications.andre.companyUpdate
+      exchange: directly.notifications
+      binding: net.insidr.company.CompanyAlertRestrictionChangeNotification
+
+    - name: directly.notifications.andre.companyUpdate
+      exchange: directly.notifications
+      binding: net.insidr.company.CompanyConfigUpdatedNotification
+
+    - name: directly.notifications.andre.alertRestrictionActivity
+      exchange: directly.notifications
+      binding: net.insidr.company.CompanyAlertRestrictionActivityNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.AcceptedExpertNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.AcceptedOfficialExpertNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.AdditionalInsiderNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.user.ExpertNotificationSettingsChangeNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.tag.ExpertTagChangeNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.tag.ExpertTagAddedNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.user.RedactedExpertNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.user.ExpertHealthChangeNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.NewInsiderNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.PromotedOfficialExpertNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.ReinstatedOfficialExpertNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.insider.RevokedOfficialExpertNotification
+
+    - name: directly.notifications.andre.expertUpdate
+      exchange: directly.notifications
+      binding: net.insidr.routing.RoutingClassificationChangeNotification
+
+    - name: directly.notifications.andre.expertReputationOverride
+      exchange: directly.notifications
+      binding: net.insidr.user.ExpertReputationOverrideNotification
+
+    - name: directly.notifications.andre.expertLastActiveDate
+      exchange: directly.notifications
+      binding: net.insidr.response.#
+
+    - name: directly.notifications.andre.expertLastActiveDate
+      exchange: directly.notifications
+      binding: net.insidr.question.QuestionFlagNotification
+
+    - name: directly.notifications.andre.expertLastActiveDate
+      exchange: directly.notifications
+      binding: net.insidr.question.ApprovedQuestionFlagNotification
+
+    - name: directly.notifications.andre.expertLastActiveDate
+      exchange: directly.notifications
+      binding: net.insidr.question.RejectedQuestionFlagNotification
+
+    - name: directly.notifications.andre.expertLastActiveDate
+      exchange: directly.notifications
+      binding: net.insidr.company.CustomerServiceNumberFlagNotification
+
+    - name: directly.notifications.andre.expertNegativeFeedback
+      exchange: directly.notifications
+      binding: net.insidr.response.ApprovedNegativeHappinessResponseNotification
+
+    - name: directly.notifications.andre.expertNegativeFeedback
+      exchange: directly.notifications
+      binding: net.insidr.response.ApprovedResponseFlagNotification
+
+    - name: directly.metrics.andre.expertMetrics
+      exchange: directly.metrics
+      binding: expertMetrics
+
+    - name: directly.notifications.andre.onlineUsers
+      exchange: directly.notifications
+      binding: net.insidr.user.OnlineUsersNotification
+
+    - name: directly.notifications.andre.newAutoResponse
+      exchange: directly.notifications
+      binding: net.insidr.response.NewAutoResponseNotification
+
+    - name: directly.rpc.andre.getExpertAvailability
+      exchange: directly.rpc
+      binding: getExpertAvailability
+      durable: true
+
+    - name: directly.notifications.andre.companyActiveQuestionsSchedule
+      exchange: directly.notifications
+      binding: net.insidr.company.CompanyCategoryScheduleChangeNotification
+
+  consumers:
+    ApprovedQuestionNotificationConsumer:
+      queue: directly.notifications.andre.approvedQuestions
+    ApprovedOneOnOneQuestionNotificationConsumer:
+      queue: directly.notifications.andre.approvedOneOnOneQuestions
+    ClosedQuestionNotificationConsumer:
+      queue: directly.notifications.andre.closedQuestions
+    EscalatedQuestionNotificationConsumer:
+      queue: directly.notifications.andre.escalatedQuestions
+    ClaimedQuestionNotificationConsumer:
+      queue: directly.notifications.andre.claimedQuestions
+    ReleasedQuestionNotificationConsumer:
+      queue: directly.notifications.andre.releasedQuestions
+    RejectedAutoResponseNotificationConsumer:
+      queue: directly.notifications.andre.rejectedAutoResponses
+    CompanyInitializationAndreNotificationConsumer:
+      queue: directly.notifications.andre.companyInitialization
+    CompanyUpdateNotificationConsumer:
+      queue: directly.notifications.andre.companyUpdate
+    CompanyExpertMetricsConsumer:
+      queue: directly.metrics.andre.expertMetrics
+    AlertRestrictionActivityNotificationConsumer:
+      queue: directly.notifications.andre.alertRestrictionActivity
+    ExpertUpdateNotificationConsumer:
+      queue: directly.notifications.andre.expertUpdate
+    ExpertActiveDateNotificationConsumer:
+      queue: directly.notifications.andre.expertLastActiveDate
+    ExpertNegativeFeedbackConsumer:
+      queue: directly.notifications.andre.expertNegativeFeedback
+    OnlineUsersNotificationConsumer:
+      queue: directly.notifications.andre.onlineUsers
+    ExpertReputationOverrideNotificationConsumer:
+      queue: directly.notifications.andre.expertReputationOverride
+    NewAutoResponseNotificationConsumer:
+      queue: directly.notifications.andre.newAutoResponse
+    GetExpertAvailabilityRpcConsumer:
+      queue: directly.rpc.andre.getExpertAvailability
+    CompanyActiveQuestionsScheduleNotificationConsumer:
+      queue: directly.notifications.andre.companyActiveQuestionsSchedule
+---
+grails:
+  plugin:
+    springsecurity:
+      providerNames: ["anonymousAuthenticationProvider", "jwtAuthenticationProvider"]
+      filterChain.chainMap:
+        - pattern: "/v1/**"
+          filters: "corsFilter,jwtAuthenticationFilter,filterInvocationInterceptor"
+---
+jwt:
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsTOxmXWiu3Ck/I7uO9AHePvdReMwXVccXmWsLXwYWGjl3Iuasak7g3K11VuQFB1D4zdUEY5EWyOKVMS8a08muSAx5BsiEixowDiP0r47kfLaFNnyjtRKoU84BBKeN2oBklE34dpqiXW6VtHyOuLuLCcHR7vkuqb/zqQoLshKMt2qYW78e4uv7SKWfQLz+1UyGAEwRCjyau43QIDsJb/vP1nfzQVFCzQshKkpLOJZknIRjJNN8OS9ovaAJt4RjbQt21ZZQiT94oQUmCPh74KLooW/QOBjZo2HoPUYQ+dMHP2+ADFKG2IpDPYOZJr/3TPbDz9gC4x4+A8P53ZDZ1zZ4QIDAQAB
+---
+cors:
+  allowedPathRegex: "/v1/.*"
+
+environments:
+  development:
+    cors:
+      allowedOriginRegex: "https://(.*\\.)?localhost:8443"
+  production:
+    cors:
+      allowedOriginRegex: "https://(.*\\.)?directly.com"
+---

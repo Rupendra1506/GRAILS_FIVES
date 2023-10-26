@@ -1,0 +1,4 @@
+json {
+        "overallReputationValues" "TIER_1", "TIER_2", "TIER_3"
+        "questionsTimePeriodInDays" 14
+}

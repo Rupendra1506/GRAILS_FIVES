@@ -1,0 +1,11 @@
+inherits template:"/common/api_response"
+
+model {
+    def message
+}
+
+json {
+    error {
+        message message
+    }
+}

@@ -1,0 +1,13 @@
+import net.insidr.company.CompanyReputation
+
+model {
+    CompanyReputation companyReputation
+}
+
+json {
+    csat companyReputation.csat
+    resolutionRate companyReputation.resolutionRate
+    actionRate companyReputation.actionRate
+    feedbackRate companyReputation.feedbackRate
+    answerQuality companyReputation.answerQuality
+}

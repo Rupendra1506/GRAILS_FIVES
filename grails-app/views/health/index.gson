@@ -1,0 +1,8 @@
+model {
+    def buildNumber
+}
+
+json {
+    message "Health Page"
+    buildNumber buildNumber
+}

@@ -1,0 +1,6 @@
+json {
+    version {
+        api config.directly["version"]["api"]
+        build config.directly["version"]["buildNumber"]
+    }
+}

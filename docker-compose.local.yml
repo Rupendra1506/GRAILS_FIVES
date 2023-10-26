@@ -1,0 +1,34 @@
+version: '3.7'
+
+#
+# $(aws ecr get-login)
+# docker-compose --file docker-compose.services.yml --file docker-compose.local.yml up
+#
+
+services:
+
+    andre:
+        image: 222336342030.dkr.ecr.us-east-1.amazonaws.com/directly-andre:latest
+        expose:
+          - 8080
+        environment:
+            DB_HOSTNAME: mysql
+            DB_USERNAME: root
+            DB_PASSWORD: ""
+            RABBIT_HOSTNAME: rabbitmq
+            RABBIT_USERNAME: andre
+            RABBIT_PASSWORD: abcd1234
+            REDIS_HOSTNAME: redis
+            LOG_LEVEL: INFO
+        depends_on:
+          - mysql
+          - redis
+        networks:
+          - default
+          - rabbitmq
+
+networks:
+
+    rabbitmq:
+        external:
+            name: rabbitmq_default

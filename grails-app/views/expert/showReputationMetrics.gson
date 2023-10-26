@@ -1,0 +1,14 @@
+import net.insidr.api.model.ExpertReputationList
+
+inherits template:"/common/api_response"
+
+model {
+   ExpertReputationList expertReputationList
+}
+
+json {
+   data {
+       metricsMeta g.render(template: '/common/metricsMeta')
+       metricsByCompany g.render(template: '/expert/expertReputation', collection: expertReputationList.expertReputations, var: 'expertReputation')
+   }
+}

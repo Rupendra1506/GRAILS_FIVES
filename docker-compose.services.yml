@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+
+    mysql:
+        image: mysql:5.7
+        expose:
+          - 3306
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            MYSQL_DATABASE: andre
+
+    redis:
+        image: redis:5.0.5-alpine
+        expose:
+          - 6379

@@ -1,0 +1,13 @@
+import net.insidr.company.Company
+
+model {
+    Company company
+}
+
+json {
+    companyId company.companyId
+    tagId company.tagId
+    alias company.alias
+    name company.name
+    metrics g.render(template: '/company/companyReputation', model: [ companyReputation: company.companyReputation ])
+}
